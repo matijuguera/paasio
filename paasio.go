@@ -16,8 +16,8 @@ type MyWriteCounter struct {
 }
 
 type Counter struct {
-	bytes int64
-	ops   int
+	bytes      int64
+	operations int
 	sync.RWMutex
 }
 
@@ -54,21 +54,21 @@ func (w *MyWriteCounter) WriteCount() (n int64, nops int) {
 	return w.Count()
 }
 
-func (rc *MyWriteCounter) Write(b []byte) (int, error) {
-	m, err := rc.Writer.Write(b)
-	rc.AddBytes(m)
+func (wc *MyWriteCounter) Write(b []byte) (int, error) {
+	m, err := wc.Writer.Write(b)
+	wc.AddBytes(m)
 	return m, err
 }
 
 func (c *Counter) Count() (int64, int) {
 	c.RLock()
 	defer c.RUnlock()
-	return c.bytes, c.ops
+	return c.bytes, c.operations
 }
 
 func (c *Counter) AddBytes(n int) {
 	c.Lock()
 	defer c.Unlock()
 	c.bytes += int64(n)
-	c.ops++
+	c.operations++
 }
