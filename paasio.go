@@ -13,3 +13,12 @@ func (w MyWriteCounter) WriteCount() (n int64, nops int) {
 func NewWriteCounter(w io.Writer) WriteCounter {
 	return MyWriteCounter{w}
 }
+
+type MyReadWriter interface {
+	io.Reader
+	io.Writer
+}
+
+func NewReadWriteCounter(rw MyReadWriter) WriteCounter {
+	return MyWriteCounter{rw}
+}
